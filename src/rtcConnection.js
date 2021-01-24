@@ -43,11 +43,16 @@ peerConnection.onconnectionstatechange = function (event) {
     if (!socket || !socket.connected) {
         socket = io.connect("http://localhost:65534/rtc");
         socket.on("connect", function () {
-          socket.emit("TV_REGISTER");
+          localStorage.getItem("projCode");
+          socket.emit("TV_REGISTER",{
+            token:'',
+            code:localStorage.getItem("projCode")||''
+          });
           console.log("Registing from server...");
         });
         socket.on("TV_REGISTER_SUCCESS", function (config) {
           that.code = config.projCode || "获取投屏码失败";
+          localStorage.setItem("projCode",that.code.toUpperCase());
           console.log("Regist Successful, config:", config);
         });
         socket.on("NEW_CLIENT_JOIN", (data) => {
