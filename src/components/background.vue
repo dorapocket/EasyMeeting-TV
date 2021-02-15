@@ -11,8 +11,8 @@
   >
     <div class="centerModal" style="width: 25%">
       <div class="timeArea">
-        <div style="font-size: 2vw">2021年01月11日</div>
-        <div style="font-size: 3vw">19:20</div>
+        <div style="font-size: 2vw">{{date}}</div>
+        <div style="font-size: 3vw">{{time}}</div>
         <div></div>
       </div>
       <div class="codeArea">
@@ -29,7 +29,8 @@
       </div>
     </div>
     <div class="centerModal" style="width: 60%">
-      <div class="titleArea">401-会议室</div>
+      <div class="titleArea">{{roomInfo.name}}</div>
+      <div class="posArea">{{roomInfo.pos}}</div>
       <div class="usageArea">
       <!--<div style="align-self:flex-start;margin:0px 0px 20px 70px;font-size:2vw;">
           会议室安排
@@ -40,11 +41,11 @@
               <th class="arrangeHead">主题</th>
               <th class="arrangeHead">发起人</th>
             </tr>
-            <tr v-for="i in 5" :key="i" class="row">
-              <td class="arrangeBody">2020年1月12日 13:00-15:00</td>
-              <td class="arrangeBody">TextVQA组会
+            <tr v-for="item in formatActs" :key="item" class="row">
+              <td class="arrangeBody">{{item.time}}</td>
+              <td class="arrangeBody">{{item.theme}}
               </td>
-              <td class="arrangeBody">xx
+              <td class="arrangeBody">{{item.sponsor}}
               </td>
             </tr>
           </table>
@@ -88,6 +89,14 @@
   color: white;
   padding: 20px;
   font-size: 3.5vw;
+  text-align: center;
+}
+.posArea {
+  width: 100%;
+  height: 15%;
+  color: white;
+  padding: 10px;
+  font-size: 1.5vw;
   text-align: center;
 }
 #QR {
@@ -147,16 +156,57 @@
 <script>
 //https://www.bing.com/HPImageArchive.aspx?format=js&idx=3&n=1
 import Carousel from "ant-design-vue/lib/carousel";
+let d=new Date();
+    function dateFormat(fmt, date){
+    let ret;
+    const opt = {
+        "Y+": date.getFullYear().toString(),        // 年
+        "m+": (date.getMonth() + 1).toString(),     // 月
+        "d+": date.getDate().toString(),            // 日
+        "H+": date.getHours().toString(),           // 时
+        "M+": date.getMinutes().toString(),         // 分
+        "S+": date.getSeconds().toString()          // 秒
+        // 有其他格式化字符需求可以继续添加，必须转化成字符串
+    };
+    for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+        }
+    }
+    return fmt;
+}
 export default {
   components: { Carousel },
-  props:['code'],
+  props:['code','acts','roomInfo',"imageUrl"],
   data: () => ({
-    imageUrl: [
-      "https://api.berryapi.net/?service=App.Bing.Images&size=large",
-      "https://api.berryapi.net/?service=App.Bing.Images&size=large",
-      "https://api.berryapi.net/?service=App.Bing.Images&size=large",
-      "https://api.berryapi.net/?service=App.Bing.Images&size=large",
-    ],
+      date:dateFormat('YYYY年mm月dd日',d),
+  time:dateFormat('HH:MM',d),
   }),
+  computed:{
+    formatActs:function(){
+      let acts=this.$props.acts||[];
+      let result;
+      for(let act of acts){
+        let b=new Date(act.time_begin);
+        let e=new Date(act.time_end);
+        result.push({
+          time:dateFormat('YYYY年mm月dd日 HH:MM',b)+'-'+dateFormat('HH:MM',e),
+          theme:act.theme,
+          sponsor:act.sponsor,
+        });
+      }
+      return result;
+    }
+  },
+  mounted:function(){
+    let that=this;
+    setInterval(function(){
+      that.time=dateFormat('HH:MM',d);
+      that.date=dateFormat('YYYY年mm月dd日',d);
+    },1000);
+  },
+  methods:{
+  }
 };
 </script>

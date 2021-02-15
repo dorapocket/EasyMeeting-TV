@@ -1,8 +1,9 @@
 <template>
   <div style="width:100%;height:100%">
-    <Backgrounds v-show="!connectionStatus" :code="code">
+    <Backgrounds v-show="displayPage=='background'" :imageUrl="backgroundImage" :code="code" :acts="activities" :roomInfo="meetingRoom">
     </Backgrounds>
-    <Projector v-show="connectionStatus" stream=""></Projector>
+    <Projector v-show="displayPage=='projector'" stream=""></Projector>
+    <Regist v-show="displayPage=='regist'"></Regist>
     <!--<h1 @click="generateCode">{{ code }}</h1>-->
   </div>
 </template>
@@ -23,28 +24,23 @@ html,body{
 <script>
 import Backgrounds from './components/background';
 import Projector from './components/projector';
+import Regist from './components/regist';
 import {rtc} from './rtcConnection.js';
 let socket;
 let peerConnection;
 let remoteStream = new MediaStream();
 
 let player;
-const configuration = {
-    iceServers: [
-        {
-            urls: "turn:turn.lgyserver.top:3478",
-            username: "1610198274:dorapocket",
-            credential: 'EJMqW3VxFEoxwwT+0p2NOwLFLBQ=',
-        },
-        { urls: "stun:turn.lgyserver.top:3478" },
-    ],
-};
+const configuration = {};
 export default {
-  components:{Backgrounds,Projector},
+  components:{Backgrounds,Projector,Regist},
   data: () => ({
     code: "未连接",
-    connectionStatus:false,
+    displayPage:'regist',
     stream:new MediaStream(),
+    meetingRoom:{},
+    activities:[],
+    backgroundImage:[],
   }),
   methods: {
   },
