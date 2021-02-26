@@ -1,4 +1,5 @@
 import io from "socket.io-client";
+import { message } from 'ant-design-vue';
 const rtcServer="http://192.168.31.90:65534/rtc";
 export function rtc(config) {
   let { peerConnection, socket, player, that } = config;
@@ -48,13 +49,15 @@ export function rtc(config) {
     socket.on("connect", function() {
       
     });
+
     // FIXME: 测试用接受token
     socket.on('TEST_TOKEN_TV',token=>{
       console.log(token);
+      localStorage.setItem('Token',token);
     })
     socket.on("VERIFY",()=>{
       console.log("正在验证身份");
-      socket.emit('VERIFY_FEEDBACK',localStorage.getItem('Token'));
+      socket.emit('VERIFY_FEEDBACK',localStorage.getItem('Token')||'');
     });
     socket.on("VERIFY_RESPONCE",(obj)=>{
       if(obj.code==200){
@@ -65,6 +68,7 @@ export function rtc(config) {
           token:localStorage.getItem("Token") || "",
         });
       }else{
+        message.error("身份验证失败，请重置设备或稍后重试");
         console.log("身份验证失败");
         that.displayPage="regist";
         console.error(obj.msg);
@@ -83,6 +87,7 @@ export function rtc(config) {
 
 
     socket.on("NEW_CLIENT_JOIN", (data) => {
+      message.info(data.username+'已连接');
       console.log("A new Client join, username: " + data.username);
     });
     socket.on("RTC_Client_Offer_To_TV", async (data) => {
@@ -98,6 +103,7 @@ export function rtc(config) {
     });
     socket.on("disconnect", function() {
       console.warn("Disconnected.");
+      message.info('连接断开');
       that.code = "与服务器链接失败";
     });
     socket.on("RTC_Candidate_Exchange", async (message) => {

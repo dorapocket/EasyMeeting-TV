@@ -2,7 +2,7 @@
   <div style="width:100%;height:100%">
     <Backgrounds v-show="displayPage=='background'" :imageUrl="backgroundImage" :code="code" :acts="activities" :roomInfo="meetingRoom">
     </Backgrounds>
-    <Projector v-show="displayPage=='projector'" stream=""></Projector>
+    <Projector v-show="displayPage=='projector'" stream="" :code="code"></Projector>
     <Regist v-show="displayPage=='regist'"></Regist>
     <!--<h1 @click="generateCode">{{ code }}</h1>-->
   </div>

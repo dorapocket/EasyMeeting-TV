@@ -59,11 +59,12 @@
       :speed="3000"
     >
       <img class="backgroundImgs" :src="imageUrl[0]" alt="img0" />
-      <img class="backgroundImgs" :src="imageUrl[1]" alt="img0" />
-      <img class="backgroundImgs" :src="imageUrl[2]" alt="img0" />
-      <img class="backgroundImgs" :src="imageUrl[3]" alt="img0" />
+      <img class="backgroundImgs" :src="imageUrl[1]" alt="img1" />
+      <img class="backgroundImgs" :src="imageUrl[2]" alt="img2" />
+      <img class="backgroundImgs" :src="imageUrl[3]" alt="img3" />
     </Carousel>
-  </div>
+
+</div>
 </template>
 <style>
 .arrangeBody{
@@ -202,8 +203,8 @@ export default {
   mounted:function(){
     let that=this;
     setInterval(function(){
-      that.time=dateFormat('HH:MM',d);
-      that.date=dateFormat('YYYY年mm月dd日',d);
+      that.time=dateFormat('HH:MM',new Date());
+      that.date=dateFormat('YYYY年mm月dd日',new Date());
     },1000);
   },
   methods:{
