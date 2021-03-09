@@ -1,9 +1,9 @@
 import io from "socket.io-client";
 import { message } from 'ant-design-vue';
-const rtcServer="http://192.168.31.90:65534/rtc";
+const config=require('./config.json');
+const rtcServer=config.rtcServer;
 export function rtc(config) {
   let { peerConnection, socket, player, that } = config;
-  console.log(that);
   //remoteStream=new Proxy(remoteStream,{
 
   //});
@@ -47,17 +47,12 @@ export function rtc(config) {
     
     socket = io.connect(rtcServer);
     socket.on("connect", function() {
-      
+      console.log('connect ok!');
     });
 
-    // FIXME: 测试用接受token
-    socket.on('TEST_TOKEN_TV',token=>{
-      console.log(token);
-      localStorage.setItem('Token',token);
-    })
     socket.on("VERIFY",()=>{
       console.log("正在验证身份");
-      socket.emit('VERIFY_FEEDBACK',localStorage.getItem('Token')||'');
+      socket.emit('VERIFY_FEEDBACK',localStorage.getItem('token')||'');
     });
     socket.on("VERIFY_RESPONCE",(obj)=>{
       if(obj.code==200){
@@ -65,7 +60,7 @@ export function rtc(config) {
         that.displayPage="background";
         socket.emit("TV_GETINFO",{
           code:localStorage.getItem("projCode") || "",
-          token:localStorage.getItem("Token") || "",
+          token:localStorage.getItem("token") || "",
         });
       }else{
         message.error("身份验证失败，请重置设备或稍后重试");

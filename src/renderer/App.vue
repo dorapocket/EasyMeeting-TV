@@ -1,9 +1,9 @@
 <template>
-  <div style="width:100%;height:100%">
+  <div id="app" style="width:100%;height:100%">
     <Backgrounds v-show="displayPage=='background'" :imageUrl="backgroundImage" :code="code" :acts="activities" :roomInfo="meetingRoom">
     </Backgrounds>
     <Projector v-show="displayPage=='projector'" stream="" :code="code"></Projector>
-    <Regist v-show="displayPage=='regist'"></Regist>
+    <Regist v-show="displayPage=='regist'" :registType="registType"></Regist>
     <!--<h1 @click="generateCode">{{ code }}</h1>-->
   </div>
 </template>
@@ -22,6 +22,7 @@ html,body{
 }
 </style>
 <script>
+/* eslint-disable */
 import Backgrounds from './components/background';
 import Projector from './components/projector';
 import Regist from './components/regist';
@@ -37,6 +38,7 @@ export default {
   data: () => ({
     code: "未连接",
     displayPage:'regist',
+    registType:'loading',
     stream:new MediaStream(),
     meetingRoom:{},
     activities:[],
@@ -46,10 +48,31 @@ export default {
   },
   async mounted() {
     let that=this;
-    console.log("created");
     player = document.getElementById("video");
     player.srcObject = remoteStream;
-    rtc({socket,peerConnection,player,configuration,that});
+    
+    this.$http.get('/device/validDeviceToken',{}).then(res=>{
+      if(res.data.code==200){
+        localStorage.setItem("token",res.data.token);
+        that.displayPage="background";
+        that.registType="loading";
+        rtc({socket,peerConnection,player,configuration,that});
+      }
+    }).catch(error=>{
+      console.error(error);
+      that.displayPage="regist";
+      if (!error.response||!error.response.status) {
+        
+        that.registType="neterr";
+      }else{
+        const token=localStorage.getItem('token')||'';
+        if(token==''){
+that.registType="first";
+        }else{
+          that.registType="timeout";
+        }
+      }
+    });
   },
 };
 </script>

@@ -23,8 +23,8 @@
           src="https://res.wx.qq.com/wxdoc/dist/assets/img/WXACode.fa3d686a.png"
           alt=""
         />
-        <div style="margin-top: 10px; margin-bottom: 50px">
-          扫码预约会议室、查看使用情况等
+        <div style="margin-top: 20px; margin-bottom: 50px">
+          扫码预约/抢占会议室、查看使用情况等
         </div>
       </div>
     </div>
@@ -35,8 +35,8 @@
       <!--<div style="align-self:flex-start;margin:0px 0px 20px 70px;font-size:2vw;">
           会议室安排
       </div>-->
-          <table style="width:80%;margin-top:50px">
-            <tr style="padding:5px;border-bottom:2px solid white;">
+          <table style="width:80%;margin-top:0px">
+            <tr style="padding:0px 5px;border-bottom:2px solid white;">
               <th class="arrangeHead">时间</th>
               <th class="arrangeHead">主题</th>
               <th class="arrangeHead">发起人</th>
@@ -49,6 +49,9 @@
               </td>
             </tr>
           </table>
+          <h2 v-if="formatActs.length==0" style="margin-top:30%;wodth:100%;text-align:center;color:white
+           ">暂无安排
+    </h2>
         </div>
     </div>
     <Carousel
@@ -94,7 +97,7 @@
 }
 .posArea {
   width: 100%;
-  height: 15%;
+  height: 8%;
   color: white;
   padding: 10px;
   font-size: 1.5vw;
@@ -102,7 +105,7 @@
 }
 #QR {
   width: 50%;
-  margin-top: 30px;
+  margin-top: 70px;
 }
 #projCode {
   font-size: 3.5vw;
@@ -155,6 +158,7 @@
 }
 </style>
 <script>
+/* eslint-disable */
 //https://www.bing.com/HPImageArchive.aspx?format=js&idx=3&n=1
 import Carousel from "ant-design-vue/lib/carousel";
 let d=new Date();
@@ -187,7 +191,7 @@ export default {
   computed:{
     formatActs:function(){
       let acts=this.$props.acts||[];
-      let result;
+      let result=[];
       for(let act of acts){
         let b=new Date(act.time_begin);
         let e=new Date(act.time_end);
