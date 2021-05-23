@@ -37,7 +37,7 @@ export default {
   components:{Backgrounds,Projector,Regist},
   data: () => ({
     code: "未连接",
-    displayPage:'regist',
+    displayPage:'background',
     registType:'loading',
     stream:new MediaStream(),
     meetingRoom:{},

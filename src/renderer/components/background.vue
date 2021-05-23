@@ -20,7 +20,7 @@
         <div id="projCode">{{code}}</div>
         <img
           id="QR"
-          src="https://res.wx.qq.com/wxdoc/dist/assets/img/WXACode.fa3d686a.png"
+          src="~@/assets/mp.jpg"
           alt=""
         />
         <div style="margin-top: 20px; margin-bottom: 50px">

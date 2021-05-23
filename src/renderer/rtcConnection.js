@@ -96,6 +96,17 @@ export function rtc(config) {
         socket.emit("RTC_TV_Answer_To_Server", { answer: answer });
       }
     });
+    socket.on("COMMAND",(obj)=>{
+      switch(obj.cmd){
+        case "NEW_ACTIVITIES":
+          that.activities.push(obj.data);
+          break;
+        case "RESET":
+          localStorage.removeItem("token");
+          localStorage.removeItem("projCode");
+          break;
+      }
+    });
     socket.on("disconnect", function() {
       console.warn("Disconnected.");
       message.info('连接断开');
