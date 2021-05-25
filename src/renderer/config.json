@@ -1,4 +1,5 @@
 {
+    "fullScreen":false,
     "rtcServer":"https://lgyserver.top:65534/rtc",
     "baseURL":"https://lgyserver.top:65534",
     "regSocketUrl":"https://lgyserver.top:65534/deviceReg"

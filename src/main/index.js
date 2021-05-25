@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron'
+let sysConfig = require('../renderer/config.json');
 app.commandLine.appendSwitch('--autoplay-policy','no-user-gesture-required');
 app.commandLine.appendSwitch('--remote-debugging-port',65533);
 /**
@@ -19,7 +20,7 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    fullscreen:true,
+    fullscreen:sysConfig.fullScreen,
     useContentSize: true,
     titleBarStyle: 'customButtonsOnHover',
     frame:false,

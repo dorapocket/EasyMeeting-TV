@@ -57,7 +57,6 @@ export function rtc(config) {
     socket.on("VERIFY_RESPONCE",(obj)=>{
       if(obj.code==200){
         console.log("身份验证成功");
-        that.displayPage="background";
         socket.emit("TV_GETINFO",{
           code:localStorage.getItem("projCode") || "",
           token:localStorage.getItem("token") || "",
@@ -99,6 +98,7 @@ export function rtc(config) {
     socket.on("COMMAND",(obj)=>{
       switch(obj.cmd){
         case "NEW_ACTIVITIES":
+          console.log('NEW_ACTIVITIES',obj);
           that.activities.push(obj.data);
           break;
         case "RESET":

@@ -20,7 +20,7 @@
         <div id="projCode">{{code}}</div>
         <img
           id="QR"
-          src="~@/assets/mp.jpg"
+          :src="wxacodeBase64"
           alt=""
         />
         <div style="margin-top: 20px; margin-bottom: 50px">
@@ -41,7 +41,7 @@
               <th class="arrangeHead">主题</th>
               <th class="arrangeHead">发起人</th>
             </tr>
-            <tr v-for="item in formatActs" :key="item" class="row">
+            <tr v-for="item in formatActs" :key="item.aid" class="row">
               <td class="arrangeBody">{{item.time}}</td>
               <td class="arrangeBody">{{item.theme}}
               </td>
@@ -183,7 +183,7 @@ let d=new Date();
 }
 export default {
   components: { Carousel },
-  props:['code','acts','roomInfo',"imageUrl"],
+  props:['code','acts','roomInfo',"imageUrl","wxacode"],
   data: () => ({
       date:dateFormat('YYYY年mm月dd日',d),
   time:dateFormat('HH:MM',d),
@@ -191,6 +191,7 @@ export default {
   computed:{
     formatActs:function(){
       let acts=this.$props.acts||[];
+      acts.sort(function sort(a,b){return a.time_begin-b.time_begin});
       let result=[];
       for(let act of acts){
         let b=new Date(act.time_begin);
@@ -202,6 +203,9 @@ export default {
         });
       }
       return result;
+    },
+    wxacodeBase64:function(){
+      return "data:image/png;base64,"+this.$props.wxacode
     }
   },
   mounted:function(){
@@ -210,6 +214,7 @@ export default {
       that.time=dateFormat('HH:MM',new Date());
       that.date=dateFormat('YYYY年mm月dd日',new Date());
     },1000);
+    
   },
   methods:{
   }
