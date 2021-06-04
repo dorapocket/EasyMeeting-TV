@@ -4,7 +4,7 @@ import App from './App'
 import axios from "axios";
 import Antd,{message} from 'ant-design-vue';
 const config=require("./config.json");
-
+// FIXME:yanshi
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
@@ -16,12 +16,13 @@ if (baseURL !== "") {
   console.warn("Server info:", baseURL);
   axios.defaults.baseURL = baseURL;
 }
+message.success('演示模式');
 axios.defaults.timeout=5000;
 var noAuth=[];
 axios.interceptors.request.use(config=>{
   if(noAuth.indexOf(config.url)==-1){
-    // const token = localStorage.getItem("token")||'';
-    const token = "8RPFLB7OwzHF5wFpDMFdRTH7aU9pkQlWC6oJ2RqhZIj4c9b48GMkuS80Ym7uF8iHedjhGwBZPob9VpROx1R6rwVvPPQ1uN2ipPLaOxxe9hM="
+    const token = localStorage.getItem("token")||'';
+    // const token = "8RPFLB7OwzHF5wFpDMFdRTH7aU9pkQlWC6oJ2RqhZIj4c9b48GMkuS80Ym7uF8iHedjhGwBZPob9VpROx1R6rwVvPPQ1uN2ipPLaOxxe9hM="
     console.log('current Token:',token);
     token && (config.headers.Authorization = token);
   }

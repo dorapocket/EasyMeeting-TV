@@ -45,7 +45,9 @@ export function rtc(config) {
   };
 
     
-    socket = io.connect(rtcServer);
+    socket = io.connect(rtcServer,{
+
+    });
     socket.on("connect", function() {
       console.log('connect ok!');
     });
@@ -104,11 +106,20 @@ export function rtc(config) {
         case "RESET":
           localStorage.removeItem("token");
           localStorage.removeItem("projCode");
+          location.reload();
+          break;
+        case "ERROR":
+          message.error(obj.msg+"，可能是设备被删除或重置");
+          setTimeout(()=>{
+            localStorage.removeItem("token");
+            localStorage.removeItem("projCode");
+            location.reload();
+          },5000)
           break;
       }
     });
-    socket.on("disconnect", function() {
-      console.warn("Disconnected.");
+    socket.on("disconnect", function(reason) {
+      console.warn("Disconnected.",reason);
       message.info('连接断开');
       that.code = "与服务器链接失败";
     });
