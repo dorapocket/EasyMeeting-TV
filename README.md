@@ -18,6 +18,12 @@ Easymeeting supports various functions such as conference room creation and mana
 本工程是投屏端部分代码。
 This project is part of the TV code.
 
+若要使用，请：
+- 修改src/renderer/config.json为你的服务器地址
+
+To use, please:
+- Modify src/renderer/config.json to your server address
+
 在实际使用中，投影屏幕需要连接到一个计算机，该计算机需要联网并运行本程序。该屏幕控制计算机可以是嵌入式Linux（如树莓派），也可以是个人电脑（如PC）
 For real use, the projection screen needs to be connected to a computer that needs to be networked and run this program. The screen control computer can be an embedded Linux (such as raspberry PI) or a personal computer (such as A Windows PC)
 
@@ -58,10 +64,10 @@ Welcome to submit PR or better idea!
 yarn install
 
 # serve with hot reload at localhost:9080
-npm run dev
+yarn run dev
 
 # build electron application for production
-npm run build
+yarn run build
 
 #build linux appImage
 yarn run build:linux
